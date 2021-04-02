@@ -9,5 +9,4 @@ numpy
 pandas
 plotly
 gunicorn
-time
 math
