@@ -8,5 +8,4 @@ dash-table
 numpy
 pandas
 plotly
-gunicorn
 math
