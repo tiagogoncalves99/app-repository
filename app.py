@@ -12,7 +12,6 @@ import dash_bootstrap_components as dbc
 from dash.dependencies import Input, Output, State
 from dash.exceptions import PreventUpdate
 
-import datetime
 import time
 
 import math
@@ -1589,40 +1588,40 @@ def update_graph3(country, year):
                                           ))
     return fig
 
-@app.callback(Output('tab1content', 'children'),
-               Input('tabs', 'value'))
+# @app.callback(Output('tab1content', 'children'),
+#                Input('tabs', 'value'))
 
-def loadingtab1(value):
-     time.sleep(2)
-     raise PreventUpdate
+# def loadingtab1(value):
+#      time.sleep(2)
+#      raise PreventUpdate
 
-@app.callback(Output('tab2content', 'children'),
-               Input('tabs', 'value'))
+# @app.callback(Output('tab2content', 'children'),
+#                Input('tabs', 'value'))
 
-def loadingtab2(value):
-     time.sleep(2)
-     raise PreventUpdate
+# def loadingtab2(value):
+#      time.sleep(2)
+#      raise PreventUpdate
     
-@app.callback(Output('tab3content', 'children'),
-               Input('tabs', 'value'))
+# @app.callback(Output('tab3content', 'children'),
+#                Input('tabs', 'value'))
 
-def loadingtab3(value):
-     time.sleep(2)
-     raise PreventUpdate
+# def loadingtab3(value):
+#      time.sleep(2)
+#      raise PreventUpdate
     
-@app.callback(Output('tab4content', 'children'),
-               Input('tabs', 'value'))
+# @app.callback(Output('tab4content', 'children'),
+#                Input('tabs', 'value'))
 
-def loadingtab4(value):
-     time.sleep(2)
-     raise PreventUpdate
+# def loadingtab4(value):
+#      time.sleep(2)
+#      raise PreventUpdate
 
-@app.callback(Output('tab5content', 'children'),
-              Input('tabs', 'value'))
+# @app.callback(Output('tab5content', 'children'),
+#               Input('tabs', 'value'))
 
-def loadingtab5(value):
-     time.sleep(2)
-     raise PreventUpdate
+# def loadingtab5(value):
+#      time.sleep(2)
+#      raise PreventUpdate
 
 
 if __name__ == '__main__':
