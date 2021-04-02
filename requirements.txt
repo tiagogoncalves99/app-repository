@@ -11,6 +11,5 @@ pandas
 plotly
 requests
 gunicorn
-datetime
 time
 math
