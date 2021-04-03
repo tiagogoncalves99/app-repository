@@ -19,7 +19,7 @@ import pandas as pd
 import plotly.graph_objs as go
 from plotly.subplots import make_subplots
 
-df_choro = pd.read_csv("data\ini_choropleth_data.csv").replace(':',np.nan).replace('Germany including former GDR','Germany').replace(
+df_choro = pd.read_csv("data/ini_choropleth_data.csv").replace(':',np.nan).replace('Germany including former GDR','Germany').replace(
     'Kosovo (under United Nations Security Council Resolution 1244/99)', 'Kosovo')
 
 df_less15 = df_choro[df_choro['AGE']=="Less than 15 years"].copy().reset_index()
@@ -119,14 +119,14 @@ subset_options_choro = [
 ]
 
 
-df_pyramids=pd.read_csv('data\poppyramiddata v2.csv').replace(':',0).replace('Germany (until 1990 former territory of the FRG)','Germany').replace(
+df_pyramids=pd.read_csv('data/poppyramiddata v2.csv').replace(':',0).replace('Germany (until 1990 former territory of the FRG)','Germany').replace(
     'Kosovo (under United Nations Security Council Resolution 1244/99)', 'Kosovo')
 
 country_options_pyramids = [
     dict(label= country, value=country)
     for country in np.sort(df_pyramids['GEO'].unique())]
 
-df_fertility = pd.read_csv('data\FertilityRatesTotal.csv').replace(':',np.nan).replace('').replace('Germany including former GDR','Germany').replace(
+df_fertility = pd.read_csv('data/FertilityRatesTotal.csv').replace(':',np.nan).replace('').replace('Germany including former GDR','Germany').replace(
     'Kosovo (under United Nations Security Council Resolution 1244/99)', 'Kosovo')
 
 df_fertility['TIME']=df_fertility['TIME'].astype(int)
@@ -141,7 +141,7 @@ country_options_fertility= [dict(label= country, value=country)
 initial_country_options_fertility=np.sort(['Portugal','Netherlands','United Kingdom','France','Ireland',
                                    'Bulgaria', 'Germany'])
 
-df_fertility2 = pd.read_csv('data\FertilityForeignNative2010on.csv').replace(':',np.nan).replace('').replace('Germany including former GDR','Germany').replace(
+df_fertility2 = pd.read_csv('data/FertilityForeignNative2010on.csv').replace(':',np.nan).replace('').replace('Germany including former GDR','Germany').replace(
     'Kosovo (under United Nations Security Council Resolution 1244/99)', 'Kosovo')
 
 df_fertility2['Value'] = df_fertility2['Value'].str.replace(' ','').astype(float)
@@ -153,7 +153,7 @@ country_options_fertility2= [dict(label= country, value=country)
     for country in np.sort(df_fertility2['GEO'].unique())]
 
 
-df_immigration = pd.read_csv('data\TotalPopulation_NativeForeign_BroadAgeGroups.csv').replace('Germany (until 1990 former territory of the FRG)','Germany')
+df_immigration = pd.read_csv('data/TotalPopulation_NativeForeign_BroadAgeGroups.csv').replace('Germany (until 1990 former territory of the FRG)','Germany')
 
 country_options_migration_lines=[dict(label= country, value=country)
     for country in np.sort(df_immigration['GEO'].unique())]
@@ -237,8 +237,8 @@ def preprocess_poppyramid(df_input, country, year):
     
     return df
 
-popprojections = pd.read_csv('data\Projections_Population.csv').replace('Germany (until 1990 former territory of the FRG)','Germany')
-demoprojections = pd.read_csv('data\Projections_DemographicBalances.csv').replace('Germany (until 1990 former territory of the FRG)','Germany')
+popprojections = pd.read_csv('data/Projections_Population.csv').replace('Germany (until 1990 former territory of the FRG)','Germany')
+demoprojections = pd.read_csv('data/Projections_DemographicBalances.csv').replace('Germany (until 1990 former territory of the FRG)','Germany')
 popprojections = popprojections[popprojections['TIME']!=2019]
 popprojections['Value']=popprojections['Value'].str.replace(' ','').astype(int)
 
