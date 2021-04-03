@@ -237,8 +237,8 @@ def preprocess_poppyramid(df_input, country, year):
     return df
 
 
-app = dash.Dash(__name__,external_stylesheets=[dbc.themes.BOOTSTRAP])
-
+app = dash.Dash(__name__,external_stylesheets=[dbc.themes.BOOTSTRAP], )
+server = app.server
 app.layout = html.Div(#style={'backgroundColor':'#f9ffff'}, 
                       children=[
     html.Div([
