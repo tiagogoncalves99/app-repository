@@ -72,7 +72,7 @@ def choropleth_data(year, segment):
                                       showocean=True,   # default = False
                                       oceancolor='rgba(0,0,0,0)',
                                       bgcolor='#f9ffff',
-                                      resolution = 50,
+                                      resolution = 110,
                                       center=dict(lon=12, lat=50),
                                       
                                      ),
@@ -81,7 +81,7 @@ def choropleth_data(year, segment):
                              title=dict(text='Percentage of population younger than 15 on year ' + str(year),
                                         font_size=20,
                                         font_color="#002B6B",
-                                        font_family="Glacial Indifference",
+                                        font_family="Tw Cen MT, Courier New",
                                         x=.5 # Title relative position according to the xaxis, range (0,1)
                                        )
                             )
@@ -105,7 +105,7 @@ def choropleth_data(year, segment):
                      title=dict(text='Percentage of population that is 65 or older on year ' + str(year),
                                 font_size=20,
                                 font_color="#002B6B",
-                                font_family="Glacial Indifference",
+                                font_family="Tw Cen MT, Courier New",
                                 x=.5 # Title relative position according to the xaxis, range (0,1)
                                )
                     )
@@ -236,6 +236,55 @@ def preprocess_poppyramid(df_input, country, year):
     
     return df
 
+popprojections = pd.read_csv('data/Projections_Population.csv').replace('Germany (until 1990 former territory of the FRG)','Germany')
+demoprojections = pd.read_csv('data/Projections_DemographicBalances.csv').replace('Germany (until 1990 former territory of the FRG)','Germany')
+popprojections = popprojections[popprojections['TIME']!=2019]
+popprojections['Value']=popprojections['Value'].str.replace(' ','').astype(int)
+
+
+def choropleth_data_projections(year):
+    
+    df_choro_proj=demoprojections[(demoprojections['INDIC_DE']=='Median age of population')].copy()
+    zmin = math.floor(df_choro_proj.Value.min())
+    zmax = math.ceil(df_choro_proj.Value.max())
+    colorscale = 'Purpor'
+    
+    df_choro_proj=df_choro_proj[df_choro_proj['TIME']==year]
+    data_choropleth = dict(type='choropleth',
+                       locations=df_choro_proj['GEO'],  #There are three ways to 'merge' your data with the data pre embedded in the map
+                       locationmode='country names',
+                       z=df_choro_proj['Value'],
+                       text=df_choro_proj['GEO'],
+                       colorscale= colorscale,
+                       zmin = zmin,
+                       zmax = zmax
+                      )
+
+    layout_choropleth = dict(geo=dict(scope='europe',  #default
+                                      projection=dict(type='orthographic'
+                                                     ),
+                                      #showland=True,   # default = True
+                                      
+                                      landcolor='white',
+                                      showlakes=False,#lakecolor='white',
+                                      showocean=True,   # default = False
+                                      oceancolor='rgba(0,0,0,0)',
+                                      bgcolor='#f9ffff',
+                                      resolution = 110,
+                                      center=dict(lon=12, lat=50),
+                                      
+                                     ),
+                             
+                             dragmode=False,
+                             title=dict(text='Median age of the population on year ' + str(year),
+                                        font_size=20,
+                                        font_color="#002B6B",
+                                        font_family="Tw Cen MT",
+                                        x=.5 # Title relative position according to the xaxis, range (0,1)
+                                       )
+                            )
+    return [data_choropleth, layout_choropleth]
+
 
 app = dash.Dash(__name__,external_stylesheets=[dbc.themes.BOOTSTRAP], )
 server = app.server
@@ -245,7 +294,7 @@ app.layout = html.Div(#style={'backgroundColor':'#f9ffff'},
     html.H1("Europe's ageing population - What's this phenomenon?",
             style={
                 'color': '#002B6B',
-                'font-family': 'Tw Cen MT',
+                'font-family': 'Tw Cen MT, Courier New',
                 'fontSize': 45,
                 
                 'margin-left':'100px',
@@ -278,7 +327,7 @@ app.layout = html.Div(#style={'backgroundColor':'#f9ffff'},
             options=subset_options_choro,
             value='Less than 15 years',
             labelStyle={'display': 'inline-block'},
-            style={'font_family':'Glacial Indifference', 'margin-left': '5px', 'width':'100%'},
+            style={'font_family':'Tw Cen MT, Courier New', 'margin-left': '5px', 'width':'100%'},
             inputStyle={"margin-left": "28px", 'margin-right':'10px'}
             ),
           ], style={'width':'100%'}),
@@ -316,7 +365,7 @@ app.layout = html.Div(#style={'backgroundColor':'#f9ffff'},
                     html.Div('Over the past few decades, better healthcare services and the absence of major conflicts have contributed to a higher life expectancy among Europe’s nations. Combined with lower birth rates, this is resulting in a continent with a population that is getting older and inverting its nations’ population pyramids. This phenomenon, known as the Ageing of Europe, carries many socio-economic consequences, such as future overloading on the health and social care services or a higher pressure on pensions’ systems.',
                      style={
                          'textAlign':'justify',
-                         'font-family': 'Glacial Indifference',
+                         'font-family': 'Tw Cen MT, Courier New',
                          'color': '#002B6B',
                          'fontSize': 20,
                          'marginBottom': '1.5em',
@@ -324,7 +373,7 @@ app.layout = html.Div(#style={'backgroundColor':'#f9ffff'},
                     html.Div('Are there solutions to mitigate this problem or to minimize its long-term consequences? Is immigration a solution, or are policies that incentive natality preferred? Here we explore some sides of this demographic problem recurring to data made available by the European portal Eurostat.',
                    style={
                          'textAlign':'justify',
-                         'font-family': 'Glacial Indifference',
+                         'font-family': 'Tw Cen MT, Courier New',
                          'color': '#002B6B',
                          'fontSize': 20,
                          }
@@ -354,7 +403,7 @@ app.layout = html.Div(#style={'backgroundColor':'#f9ffff'},
                             options=country_options_fertility,
                             value=initial_country_options_fertility,
                             multi=True,
-                            style={'font_family':'Glacial Indifference'}, # "overflow-y":"scroll"},
+                            style={'font_family':'Tw Cen MT, Courier New'}, # "overflow-y":"scroll"},
                         ),
             dcc.Graph(id='fertility-lines'),
             
@@ -380,7 +429,7 @@ app.layout = html.Div(#style={'backgroundColor':'#f9ffff'},
                             options=country_options_fertility2,
                             value='Switzerland',
                             multi=False,
-                            style={'font_family':'Glacial Indifference'},
+                            style={'font_family':'Tw Cen MT, Courier New'},
                             ),
             
             
@@ -401,7 +450,7 @@ app.layout = html.Div(#style={'backgroundColor':'#f9ffff'},
                     html.Div('Regarding fertility rates, the average number of births per woman varies from country to country within Europe, but has been generally decreasing over the past few decades across the continent. Consequently, the fertility rates are far from the minimum generation renewal standard, set at 2.1 children per woman, considered necessary in developed countries to maintain the population in the long run.',
                      style={
                          'textAlign':'justify',
-                         'font-family': 'Glacial Indifference',
+                         'font-family': 'Tw Cen MT, Courier New',
                          'color': '#002B6B',
                          'fontSize': 20,
                          'marginBottom': '1.5em'
@@ -409,7 +458,7 @@ app.layout = html.Div(#style={'backgroundColor':'#f9ffff'},
                     html.Div('There are factors of social, economic and cultural nature that explain such low birth rates all across Europe. Individual and behavioural decisions linked to family planning, also considering the reality of careers and labour market, education and well-being are some of the factors that influence these values.',
                    style={
                          'textAlign':'justify',
-                         'font-family': 'Glacial Indifference',
+                         'font-family': 'Tw Cen MT, Courier New',
                          'color': '#002B6B',
                          'fontSize': 20,
                          'marginBottom': '1.5em'
@@ -418,7 +467,7 @@ app.layout = html.Div(#style={'backgroundColor':'#f9ffff'},
                     html.Div('Despite this, there are some European countries that are close to the target value, such as Ireland or France. On the other hand, countries like Ukraine, Spain and Italy have been registering some of the lowest values on Europe on recent years. There are also some countries that rely heavily on births from foreign parents, which is explained by the substantial reception of younger migrants of childbearing age.',
                    style={
                          'textAlign':'justify',
-                         'font-family': 'Glacial Indifference',
+                         'font-family': 'Tw Cen MT, Courier New',
                          'color': '#002B6B',
                          'fontSize': 20,
                          }
@@ -456,7 +505,7 @@ app.layout = html.Div(#style={'backgroundColor':'#f9ffff'},
                     html.Div("\n Although migration may play an important role in Europe's population dynamism, it is unlikely that it can reverse the ongoing trend of population ageing.",
                      style={
                          'textAlign':'justify',
-                         'font-family': 'Glacial Indifference',
+                         'font-family': 'Tw Cen MT, Courier New',
                          'color': '#002B6B',
                          'fontSize': 20,
                          'marginBottom': '1.5em'
@@ -464,7 +513,7 @@ app.layout = html.Div(#style={'backgroundColor':'#f9ffff'},
                     html.Div('If migration policies are carried out successfully, European countries may have several benefits, namely in combating an aging population across the continent, and in some regions in particular, by reducing demographic imbalances and boosting labour markets, which creates benefits for the economy of these countries.',
                    style={
                          'textAlign':'justify',
-                         'font-family': 'Glacial Indifference',
+                         'font-family': 'Tw Cen MT, Courier New',
                          'color': '#002B6B',
                          'fontSize': 20,
                          }
@@ -495,7 +544,7 @@ app.layout = html.Div(#style={'backgroundColor':'#f9ffff'},
                 html.Div('However, recent migration trends have affected Europe unevenly. According to Eurostat data, some more peripherical countries such as Bulgaria or Portugal, as well as central parts of France have seen their population decreasing. Other regions, such as the case of some German and Swedish cities, have had a very considerable inflow of migrants, mainly from outside Europe.',
                    style={
                          'textAlign':'justify',
-                         'font-family': 'Glacial Indifference',
+                         'font-family': 'Tw Cen MT, Courier New',
                          'color': '#002B6B',
                          'fontSize': 20,
                          }
@@ -572,7 +621,7 @@ app.layout = html.Div(#style={'backgroundColor':'#f9ffff'},
                     html.Div("On the Population Pyramids we find the result of past birth rates. In general, European countries have a strong proportion of the population over 45 years old. The baby-boomers generation’s individuals born after the Second World War (after 1945) are still present, as well as those born between 1965 and 1980, the so-called Generation X, children of the baby-boomers.",
                      style={
                          'textAlign':'justify',
-                         'font-family': 'Glacial Indifference',
+                         'font-family': 'Tw Cen MT, Courier New',
                          'color': '#002B6B',
                          'fontSize': 22,
                          'marginBottom': '1.5em',
@@ -580,7 +629,7 @@ app.layout = html.Div(#style={'backgroundColor':'#f9ffff'},
                     html.Div('Subsequently, there has been a sharp decline in birth rates in almost every European country, leading to shorter age classes at the base of the pyramids – a problem that affects south European countries the most: Greece, Italy, Portugal or Spain all have shorter pyramid bases.',
                    style={
                          'textAlign':'justify',
-                         'font-family': 'Glacial Indifference',
+                         'font-family': 'Tw Cen MT, Courier New',
                          'color': '#002B6B',
                          'fontSize': 22,
                          }
@@ -595,7 +644,7 @@ app.layout = html.Div(#style={'backgroundColor':'#f9ffff'},
                 options=country_options_pyramids,
                 value='Portugal',
                 multi=False,
-                style={'font_family':'Glacial Indifference'},
+                style={'font_family':'Tw Cen MT, Courier New'},
                 ),
             dcc.Loading(
             id="loading-poppyramid1",
@@ -609,7 +658,7 @@ app.layout = html.Div(#style={'backgroundColor':'#f9ffff'},
                 options=country_options_pyramids,
                 value='Ireland',
                 multi=False,
-                style={'font_family':'Glacial Indifference'},
+                style={'font_family':'Tw Cen MT, Courier New'},
                 ),
             dcc.Loading(
             id="loading-poppyramid2",
@@ -624,7 +673,7 @@ app.layout = html.Div(#style={'backgroundColor':'#f9ffff'},
                 options=country_options_pyramids,
                 value='France',
                 multi=False,
-                style={'font_family':'Glacial Indifference'},
+                style={'font_family':'Tw Cen MT, Courier New'},
                 ),
             dcc.Loading(
             id="loading-poppyramid3",
@@ -675,27 +724,76 @@ app.layout = html.Div(#style={'backgroundColor':'#f9ffff'},
                     
                     ),
         
-        dcc.Tab(id='Conclusions',label='Conclusions',  style={'font-family':'Tw Cen MT', 'color':'#002B6B', 'font-size':20}, 
+        dcc.Tab(id='Projections',label='Projections',  style={'font-family':'Tw Cen MT', 'color':'#002B6B', 'font-size':20}, 
                 selected_style={'font-family':'Tw Cen MT', 'color':'#002B6B', 'font-size':25},
                 children=[
                     
-                    html.Div(id='tab5content',children=[dcc.Graph(
-                figure={
-                    'data': [
-                        {'x': [1, 2, 3], 'y': [2, 4, 3],
-                            'type': 'bar', 'name': 'SF'},
-                        {'x': [1, 2, 3], 'y': [5, 4, 3],
-                         'type': 'bar', 'name': u'Montréal'},
-                    ]
-                }
-            ),
+                    html.Div(id='tab5content',children=[
+                    html.Div([
+                        html.Div([
+                            dcc.Graph(id='projections-map'
+                
+                                      ),
+                            dcc.Slider(
+                                        id='year_slider_projections',
+                                        min=2020,
+                                        max=2100,
+                                        step=5,
+                                        marks={
+                                        i : str(i) for i in range(2020,2101,5)
+                                        },
+                                        value=2020,
+                                        updatemode='drag',
+                                    ),
+                            dbc.Fade(
+                                html.Div('Hover through the map in order to update the graphs on the right side',
+                                         
+                                         style={
+                                             'textAlign':'justify',
+                                             'font-family': 'Tw Cen MT, Courier New',
+                                             'color': '#002B6B',
+                                             'fontSize': 20,
+                                             }
+                                         ),
+                                id='fade-proj',
+                                is_in=True
+                                ),
+                                    
+            ], style= {'width': '50%'} 
+                            
+                            ),
+            
+                            html.Div([
+                                dcc.Loading(type='dot', color='blue',
+                                            
+                                            children=[
+                                                html.Div([
+                                            dcc.Graph(id='projections-result1'),
+                                            dcc.Graph(id='projections-result2'), 
+                                                
+                                                ],
+                                                    style={'height':'50%'}
+                                                ),
+                                    
+
+                                    
+                                    
+                                                ]
+                                        ),
+
+                        
+        ], style= {'width':'45%'} 
+                        
+                        ),
+                 ], style={'display': 'flex'}),    
+                    
              html.Div([
                     html.Br(),
                     html.Br(),
                     html.Div("While Europe tries to stem population decline with policies to increase birth rates, some experts argue that low birth rates are a reason to celebrate. To defend this theory, they remember that this decline is also due to the recent balance in the role of gender and that a country does not need to have high birth rates to have economic growth. In addition, having fewer children results in a drastic reduction in greenhouse gas emissions, by significantly reducing consumption. Today we live more years in a healthy way, we can work later in life and another argument is that a smaller population helps to increase the per capita economic indicators, directly associated to the wealth of the country and its inhabitants. ",
                      style={
                          'textAlign':'justify',
-                         'font-family': 'Glacial Indifference',
+                         'font-family': 'Tw Cen MT, Courier New',
                          'color': '#002B6B',
                          'fontSize': 20,
                          'vertical-align':'middle', 'margin-left': '15px','margin-right': '15px',
@@ -704,7 +802,7 @@ app.layout = html.Div(#style={'backgroundColor':'#f9ffff'},
                     html.Div('In another aspect, population movements within Europe tend to be related to favourable job and career and economic opportunities. In this sense, one of the most usual internal movements is that which happens between educated young professionals from countries in the southern part of the continent to countries in north-western Europe, which has been stressed in recent years mainly after the economic crisis.',
                    style={
                          'textAlign':'justify',
-                         'font-family': 'Glacial Indifference',
+                         'font-family': 'Tw Cen MT, Courier New',
                          'color': '#002B6B',
                          'fontSize': 20,
                          'vertical-align':'middle', 'margin-left': '15px','margin-right': '15px',
@@ -714,7 +812,7 @@ app.layout = html.Div(#style={'backgroundColor':'#f9ffff'},
                     html.Div('Therefore, migration within Europe and between other continents and Europe can help create benefits for both sides. Despite this, the paradigm is a little more complex, existing factors such as the education of migrants, social, cultural and religious factors, natural and warlike events in the equation. Regardless of being widely defended by some economists and sociologists, migration is still not seen fairly as an alternative to the demographic crisis in Europe. This issue is highly relevant and is therefore used in political disputes, which are not always based on rational and fair arguments. ',
                    style={
                          'textAlign':'justify',
-                         'font-family': 'Glacial Indifference',
+                         'font-family': 'Tw Cen MT, Courier New',
                          'color': '#002B6B',
                          'fontSize': 20,
                          'vertical-align':'middle', 'margin-left': '15px','margin-right': '15px',
@@ -724,7 +822,7 @@ app.layout = html.Div(#style={'backgroundColor':'#f9ffff'},
                     html.Div('In addition, the challenges of an aging population are not exclusive to Europe. If, on the one hand, the aging of the working population is not so pronounced in the United States, there are world powers such as China and Japan, for example, where this aging phenomenon occurs. In the rest of the world, population growth has been a reality and will continue to be in the coming decades mainly due to emerging countries and also underdeveloped countries, with high birth rates. ',
                    style={
                          'textAlign':'justify',
-                         'font-family': 'Glacial Indifference',
+                         'font-family': 'Tw Cen MT, Courier New',
                          'color': '#002B6B',
                          'vertical-align':'middle', 'margin-left': '15px','margin-right': '15px',
                          'fontSize': 20,
@@ -839,7 +937,7 @@ def fertility_lines_update(countries,years):
                         
                         ),
               yaxis=dict(title='Fertility Rate'),
-              title_font_family='Glacial Indifference', title_font_color='#002B6B',
+              title_font_family='Tw Cen MT, Courier New', title_font_color='#002B6B',
               plot_bgcolor='rgba(0,0,0,0)',paper_bgcolor='rgba(0,0,0,0)',
              )
 
@@ -874,7 +972,7 @@ def fertility_bars_update(country):
 
     fig.update_layout(
         title='Number of births in ' + country + ' during the last decade',
-        title_font_family='Glacial Indifference', title_font_color='#002B6B',
+        title_font_family='Tw Cen MT, Courier New', title_font_color='#002B6B',
         plot_bgcolor='rgba(0,0,0,0)',paper_bgcolor='rgba(0,0,0,0)',
         xaxis_tickfont_size=14,
         xaxis = dict(tickvals = [i for i in range(2010,2020)],                
@@ -1022,7 +1120,7 @@ def update_immigration_bars(n_clicks,country_list,stack,absolute):
                              plot_bgcolor='rgba(0,0,0,0)',
                              xaxis = dict(
                                           title = 'Native/Foreign Population Distribution in 2019',
-                                          title_font_family='Glacial Indifference',
+                                          title_font_family='Tw Cen MT, Courier New',
                                           title_font_color='#002B6B',
                                           title_font_size = 17,
                                           ))
@@ -1204,14 +1302,14 @@ def update_graph1(country, year):
         
             # Updating the layout for our graph
         fig.update_layout(title = 'Population Pyramid of ' + str(country),
-                             title_font_size = 20, barmode = 'relative', title_font_family='Glacial Indifference', title_font_color='#002B6B',
+                             title_font_size = 20, barmode = 'relative', title_font_family='Tw Cen MT, Courier New', title_font_color='#002B6B',
                              bargap = 0.0, bargroupgap = 0, plot_bgcolor='rgba(0,0,0,0)',paper_bgcolor='rgba(0,0,0,0)',
                              xaxis = dict(tickvals = nx,
                                             
                                           ticktext = xticksls,
                                           
                                           title = 'Population',
-                                          title_font_family='Glacial Indifference',
+                                          title_font_family='Tw Cen MT, Courier New',
                                           title_font_size = 17,
                                           ))
     return fig
@@ -1389,14 +1487,14 @@ def update_graph2(country, year):
         
             # Updating the layout for our graph
         fig.update_layout(title = 'Population Pyramid of ' + str(country),
-                             title_font_size = 20, barmode = 'relative', title_font_family='Glacial Indifference', title_font_color='#002B6B',
+                             title_font_size = 20, barmode = 'relative', title_font_family='Tw Cen MT, Courier New', title_font_color='#002B6B',
                              bargap = 0.0, bargroupgap = 0, plot_bgcolor='rgba(0,0,0,0)',paper_bgcolor='rgba(0,0,0,0)',
                              xaxis = dict(tickvals = nx,
                                             
                                           ticktext = xticksls,
                                           
                                           title = 'Population',
-                                          title_font_family='Glacial Indifference',
+                                          title_font_family='Tw Cen MT, Courier New',
                                           title_font_size = 17,
                                           ))
     return fig
@@ -1574,17 +1672,131 @@ def update_graph3(country, year):
         
             # Updating the layout for our graph
         fig.update_layout(title = 'Population Pyramid of ' + str(country),
-                             title_font_size = 20, barmode = 'relative', title_font_family='Glacial Indifference', title_font_color='#002B6B',
+                             title_font_size = 20, barmode = 'relative', title_font_family='Tw Cen MT, Courier New', title_font_color='#002B6B',
                              bargap = 0.0, bargroupgap = 0, plot_bgcolor='rgba(0,0,0,0)',paper_bgcolor='rgba(0,0,0,0)',
                              xaxis = dict(tickvals = nx,
                                             
                                           ticktext = xticksls,
                                           
                                           title = 'Population',
-                                          title_font_family='Glacial Indifference',
+                                          title_font_family='Tw Cen MT, Courier New',
                                           title_font_size = 17,
                                           ))
     return fig
+
+
+#### Conclusions Callbacks
+@app.callback(Output('projections-map','figure'),
+              Input('year_slider_projections','value'))
+
+def update_projections_graph(year):
+        
+    auxchoro = choropleth_data_projections(year)
+    
+    data_choropleth = auxchoro[0]
+    layout_choropleth = auxchoro[1]
+    
+    fig_choropleth = go.Figure(data=data_choropleth, layout=layout_choropleth)
+    
+    
+    return fig_choropleth
+
+@app.callback(Output('projections-result1','figure'),
+              Input('projections-map','hoverData'))
+
+def update_hover_projections(hover):
+    
+    if hover is None:
+        country = 'Portugal'
+    else:
+        country = hover['points'][0]['location']
+        
+    ymax=popprojections.loc[popprojections['GEO'] == country]['Value'].max()
+    data_pop_proj = [dict(type='scatter',
+
+                            x=popprojections.loc[popprojections['GEO'] == country]['TIME'],
+                            y=popprojections.loc[popprojections['GEO'] == country]['Value'],
+
+                            #text=df.loc[df['GEO'] == country]['GEO'],
+                            mode='lines',
+                            name=country
+                        ) 
+                    ]
+
+    layout_pop_proj = dict(title=dict(text= 'Population Projections for '+ country),
+                  xaxis=dict(title='Years', fixedrange=True,
+
+                            ),
+                  yaxis=dict(title='Total Population')
+
+                 )
+
+    figure = go.Figure(data=data_pop_proj, layout=layout_pop_proj)
+    figure.update_yaxes(
+        range=[0,ymax*1.1],  # sets the range of xaxis
+        constrain="domain",  # meanwhile compresses the xaxis by decreasing its "domain"
+    )
+    figure.update_layout(
+        plot_bgcolor='rgba(0,0,0,0)',paper_bgcolor='rgba(0,0,0,0)',
+        
+        )
+    
+    return figure
+
+@app.callback(Output('projections-result2','figure'),
+              [Input('projections-map','hoverData'),
+               Input('year_slider_projections','value')])
+
+def update_distribution_projection(hover,year):
+    
+    if hover is None:
+        country = 'Portugal'
+    else:
+        country = hover['points'][0]['location']
+    
+    time.sleep(0.5)
+       
+    
+    groups = ['Younger than 15', '15 years to 64 years', 'Older than 65']
+    country_values=demoprojections[(demoprojections['GEO']==country)&(demoprojections['TIME']==year)&(
+        demoprojections['INDIC_DE']!='Median age of population')]['Value'].to_list()
+    eu27_values=demoprojections[(demoprojections['GEO']=='European Union - 27 countries (from 2020)')&(demoprojections['TIME']==year)&(
+        demoprojections['INDIC_DE']!='Median age of population')]['Value'].to_list()
+    
+    fig = go.Figure()
+        
+    fig.add_trace(go.Bar(x=groups,y=country_values,name = country))
+    
+    fig.add_trace(go.Bar(x=groups,y=eu27_values, name = 'EU-27 Average'))    
+    
+    fig.update_layout(title_font_family='Tw Cen MT, Courier New', title_font_color='#002B6B',
+            showlegend=True,
+            xaxis_type='category',
+            yaxis=dict(
+                type='linear',
+                ticksuffix='%'),
+            
+            plot_bgcolor='rgba(0,0,0,0)')
+    
+    if year==2020:
+        fig.update_layout(
+            title='Population distribution by broad age groups in ' + country + ' and EU-27 average<br>Year '+ str(year),
+            )
+    else:
+        fig.update_layout(
+        title='Projections for the population distribution by broad age groups in ' + country + ' and EU-27 average<br>Year '+ str(year),
+        )
+        
+    return fig
+
+@app.callback(Output('fade-proj','is_in'),
+              [Input('projections-map','hoverData')])
+
+def update_fade(hover):
+    if hover is None:
+        return True
+    else:
+        return False
 
 # @app.callback(Output('tab1content', 'children'),
 #                Input('tabs', 'value'))
