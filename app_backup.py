@@ -17,6 +17,7 @@ import numpy as np
 
 import pandas as pd
 import plotly.graph_objs as go
+from plotly.subplots import make_subplots
 
 df_choro = pd.read_csv("data/ini_choropleth_data.csv").replace(':',np.nan).replace('Germany including former GDR','Germany').replace(
     'Kosovo (under United Nations Security Council Resolution 1244/99)', 'Kosovo')
@@ -96,7 +97,7 @@ def choropleth_data(year, segment):
                               showocean=True,   # default = False
                               oceancolor='rgba(0,0,0,0)',
                               bgcolor='#f9ffff',
-                              resolution = 50,
+                              resolution = 110,
                               center=dict(lon=12, lat=50),
                               
                              ),
@@ -247,7 +248,7 @@ def choropleth_data_projections(year):
     df_choro_proj=demoprojections[(demoprojections['INDIC_DE']=='Median age of population')].copy()
     zmin = math.floor(df_choro_proj.Value.min())
     zmax = math.ceil(df_choro_proj.Value.max())
-    colorscale = 'Purpor'
+    colorscale = 'YlOrBr'#'Purpor'
     
     df_choro_proj=df_choro_proj[df_choro_proj['TIME']==year]
     data_choropleth = dict(type='choropleth',
@@ -362,20 +363,21 @@ app.layout = html.Div(#style={'backgroundColor':'#f9ffff'},
     ], style= {'width': '58%'}),
                 html.Div([
                     html.Br(),
+                    html.Br(),
                     html.Div('Over the past few decades, better healthcare services and the absence of major conflicts have contributed to a higher life expectancy among Europe’s nations. Combined with lower birth rates, this is resulting in a continent with a population that is getting older and inverting its nations’ population pyramids. This phenomenon, known as the Ageing of Europe, carries many socio-economic consequences, such as future overloading on the health and social care services or a higher pressure on pensions’ systems.',
                      style={
                          'textAlign':'justify',
-                         'font-family': 'Tw Cen MT, Courier New',
+                         'font-family': 'MS Reference Sans Serif',
                          'color': '#002B6B',
-                         'fontSize': 20,
+                         'fontSize': 18,
                          'marginBottom': '1.5em',
                          }),
                     html.Div('Are there solutions to mitigate this problem or to minimize its long-term consequences? Is immigration a solution, or are policies that incentive natality preferred? Here we explore some sides of this demographic problem recurring to data made available by the European portal Eurostat.',
                    style={
                          'textAlign':'justify',
-                         'font-family': 'Tw Cen MT, Courier New',
+                         'font-family': 'MS Reference Sans Serif, Courier New',
                          'color': '#002B6B',
-                         'fontSize': 20,
+                         'fontSize': 18,
                          }
                    ),
     ], style={'width': '40%', 'vertical-align':'middle', 'margin-left':'85px', 'margin-right':'65px'}),
@@ -450,26 +452,26 @@ app.layout = html.Div(#style={'backgroundColor':'#f9ffff'},
                     html.Div('Regarding fertility rates, the average number of births per woman varies from country to country within Europe, but has been generally decreasing over the past few decades across the continent. Consequently, the fertility rates are far from the minimum generation renewal standard, set at 2.1 children per woman, considered necessary in developed countries to maintain the population in the long run.',
                      style={
                          'textAlign':'justify',
-                         'font-family': 'Tw Cen MT, Courier New',
+                         'font-family': 'MS Reference Sans Serif, Courier New',
                          'color': '#002B6B',
-                         'fontSize': 20,
+                         'fontSize': 18,
                          'marginBottom': '1.5em'
                          }),
                     html.Div('There are factors of social, economic and cultural nature that explain such low birth rates all across Europe. Individual and behavioural decisions linked to family planning, also considering the reality of careers and labour market, education and well-being are some of the factors that influence these values.',
                    style={
                          'textAlign':'justify',
-                         'font-family': 'Tw Cen MT, Courier New',
+                         'font-family': 'MS Reference Sans Serif, Courier New',
                          'color': '#002B6B',
-                         'fontSize': 20,
+                         'fontSize': 18,
                          'marginBottom': '1.5em'
                          }
                    ),
                     html.Div('Despite this, there are some European countries that are close to the target value, such as Ireland or France. On the other hand, countries like Ukraine, Spain and Italy have been registering some of the lowest values on Europe on recent years. There are also some countries that rely heavily on births from foreign parents, which is explained by the substantial reception of younger migrants of childbearing age.',
                    style={
                          'textAlign':'justify',
-                         'font-family': 'Tw Cen MT, Courier New',
+                         'font-family': 'MS Reference Sans Serif, Courier New',
                          'color': '#002B6B',
-                         'fontSize': 20,
+                         'fontSize': 18,
                          }
                    ),
     ], style={'width': '98%', 'vertical-align':'middle', 'margin-left': 'auto','margin-right': 'auto'}),
@@ -505,17 +507,17 @@ app.layout = html.Div(#style={'backgroundColor':'#f9ffff'},
                     html.Div("\n Although migration may play an important role in Europe's population dynamism, it is unlikely that it can reverse the ongoing trend of population ageing.",
                      style={
                          'textAlign':'justify',
-                         'font-family': 'Tw Cen MT, Courier New',
+                         'font-family': 'MS Reference Sans Serif, Courier New',
                          'color': '#002B6B',
-                         'fontSize': 20,
+                         'fontSize': 18,
                          'marginBottom': '1.5em'
                          }),
                     html.Div('If migration policies are carried out successfully, European countries may have several benefits, namely in combating an aging population across the continent, and in some regions in particular, by reducing demographic imbalances and boosting labour markets, which creates benefits for the economy of these countries.',
                    style={
                          'textAlign':'justify',
-                         'font-family': 'Tw Cen MT, Courier New',
+                         'font-family': 'MS Reference Sans Serif, Courier New',
                          'color': '#002B6B',
-                         'fontSize': 20,
+                         'fontSize': 18,
                          }
                    ),
                     
@@ -544,9 +546,9 @@ app.layout = html.Div(#style={'backgroundColor':'#f9ffff'},
                 html.Div('However, recent migration trends have affected Europe unevenly. According to Eurostat data, some more peripherical countries such as Bulgaria or Portugal, as well as central parts of France have seen their population decreasing. Other regions, such as the case of some German and Swedish cities, have had a very considerable inflow of migrants, mainly from outside Europe.',
                    style={
                          'textAlign':'justify',
-                         'font-family': 'Tw Cen MT, Courier New',
+                         'font-family': 'MS Reference Sans Serif, Courier New',
                          'color': '#002B6B',
-                         'fontSize': 20,
+                         'fontSize': 18,
                          }
                    ),
                 ], style={'margin-left':'25px', 'margin-right':'15px'}),
@@ -569,11 +571,13 @@ app.layout = html.Div(#style={'backgroundColor':'#f9ffff'},
                         ),
                     html.Div([
                         html.Div([
-                    dcc.Checklist(
+                    dbc.Checklist(
                         id='stacked-bars',
                         options=[{'label':'Stack', 'value':'Stack'}],
                         value=[],
-                        inputStyle={"margin-right": "10px"}
+                      #  switch=True,
+                        inputStyle={"margin-right": "10px"},
+                        switch=True,
                         ),
                     ], style={'width':'30%'}),
                         
@@ -621,17 +625,17 @@ app.layout = html.Div(#style={'backgroundColor':'#f9ffff'},
                     html.Div("On the Population Pyramids we find the result of past birth rates. In general, European countries have a strong proportion of the population over 45 years old. The baby-boomers generation’s individuals born after the Second World War (after 1945) are still present, as well as those born between 1965 and 1980, the so-called Generation X, children of the baby-boomers.",
                      style={
                          'textAlign':'justify',
-                         'font-family': 'Tw Cen MT, Courier New',
+                         'font-family': 'MS Reference Sans Serif, Courier New',
                          'color': '#002B6B',
-                         'fontSize': 22,
+                         'fontSize': 18,
                          'marginBottom': '1.5em',
                          }),
                     html.Div('Subsequently, there has been a sharp decline in birth rates in almost every European country, leading to shorter age classes at the base of the pyramids – a problem that affects south European countries the most: Greece, Italy, Portugal or Spain all have shorter pyramid bases.',
                    style={
                          'textAlign':'justify',
-                         'font-family': 'Tw Cen MT, Courier New',
+                         'font-family': 'MS Reference Sans Serif, Courier New',
                          'color': '#002B6B',
-                         'fontSize': 22,
+                         'fontSize': 18,
                          }
                    ),
                 html.Br(),
@@ -708,7 +712,7 @@ app.layout = html.Div(#style={'backgroundColor':'#f9ffff'},
                 },
                 value=2020,
                 step=1,
-                updatemode='drag',
+                #updatemode='drag',
                 included=False,
                 
             ),
@@ -727,14 +731,30 @@ app.layout = html.Div(#style={'backgroundColor':'#f9ffff'},
         dcc.Tab(id='Projections',label='Projections',  style={'font-family':'Tw Cen MT', 'color':'#002B6B', 'font-size':20}, 
                 selected_style={'font-family':'Tw Cen MT', 'color':'#002B6B', 'font-size':25},
                 children=[
-                    
+                
                     html.Div(id='tab5content',children=[
+                        
+                        dbc.Fade(
+                                dbc.Alert('Hover through the map in order to update the graphs below', color='primary',    
+                                         style={
+                                             'textAlign':'justify',
+                                             'font-family': 'MS Reference Sans Serif, Courier New',
+                                             'fontSize': 16,
+                                             }
+                                         ),
+                                id='fade-proj',
+                                is_in=True
+                                ),
+                        
+                        html.Div([
                     html.Div([
                         html.Div([
+                            html.Div([
                             dcc.Graph(id='projections-map'
-                
                                       ),
-                            dcc.Slider(
+                            ], style={'margin-right':'50px'}),
+                    html.Div([
+                    dcc.Slider(
                                         id='year_slider_projections',
                                         min=2020,
                                         max=2100,
@@ -744,48 +764,44 @@ app.layout = html.Div(#style={'backgroundColor':'#f9ffff'},
                                         },
                                         value=2020,
                                         updatemode='drag',
-                                    ),
-                            dbc.Fade(
-                                html.Div('Hover through the map in order to update the graphs on the right side',
-                                         
-                                         style={
-                                             'textAlign':'justify',
-                                             'font-family': 'Tw Cen MT, Courier New',
-                                             'color': '#002B6B',
-                                             'fontSize': 20,
-                                             }
-                                         ),
-                                id='fade-proj',
-                                is_in=True
-                                ),
-                                    
-            ], style= {'width': '50%'} 
+                                    ),                           
+
+                    ], style={'margin-right': '20px', 'margin-left':'20px'}),
+            ], style= {'align-items': 'center', 'justify-content': 'center', 'widht':'50%', 'height':370} 
                             
                             ),
             
                             html.Div([
+                                html.Br(),
+                                html.Br(),
+                                html.Br(),
+                                html.Br(),
                                 dcc.Loading(type='dot', color='blue',
                                             
                                             children=[
                                                 html.Div([
+                                                    html.Div([
+                                                        html.Br(),
                                             dcc.Graph(id='projections-result1'),
-                                            dcc.Graph(id='projections-result2'), 
-                                                
-                                                ],
-                                                    style={'height':'50%'}
-                                                ),
-                                    
-
-                                    
-                                    
+                                            ],style={'align-items':'top', 'verticalAlign':'top', 'width':'45%'}),#style={"max-height": "200px"}),
+                                                    html.Div([
+                                                        html.Br(),
+                                            dcc.Graph(id='projections-result2'),
+                                                ], style={"verticalAlign": "top",' align-items': 'top','width':'55%'}),
+                                                    
+                                                ], style={"verticalAlign": "top",' align-items': 'top', 'display':'flex'}),                                
                                                 ]
-                                        ),
+                                        ),             
+                                
+                 ]),
+                                ],
+                             style={"verticalAlign": "top",' align-items': 'top', 'width':'70%'}),    
+                    
 
-                        
-        ], style= {'width':'45%'} 
-                        
-                        ),
-                 ], style={'display': 'flex'}),    
+                    html.Br(),
+                    html.Br(),
+                    html.Br(),
+                    html.Br(),
                     
              html.Div([
                     html.Br(),
@@ -793,42 +809,51 @@ app.layout = html.Div(#style={'backgroundColor':'#f9ffff'},
                     html.Div("While Europe tries to stem population decline with policies to increase birth rates, some experts argue that low birth rates are a reason to celebrate. To defend this theory, they remember that this decline is also due to the recent balance in the role of gender and that a country does not need to have high birth rates to have economic growth. In addition, having fewer children results in a drastic reduction in greenhouse gas emissions, by significantly reducing consumption. Today we live more years in a healthy way, we can work later in life and another argument is that a smaller population helps to increase the per capita economic indicators, directly associated to the wealth of the country and its inhabitants. ",
                      style={
                          'textAlign':'justify',
-                         'font-family': 'Tw Cen MT, Courier New',
+                         'font-family': 'MS Reference Sans Serif, Courier New',
                          'color': '#002B6B',
-                         'fontSize': 20,
+                         'fontSize': 18,
                          'vertical-align':'middle', 'margin-left': '15px','margin-right': '15px',
                          'marginBottom': '1.5em',
                          }),
                     html.Div('In another aspect, population movements within Europe tend to be related to favourable job and career and economic opportunities. In this sense, one of the most usual internal movements is that which happens between educated young professionals from countries in the southern part of the continent to countries in north-western Europe, which has been stressed in recent years mainly after the economic crisis.',
                    style={
                          'textAlign':'justify',
-                         'font-family': 'Tw Cen MT, Courier New',
+                         'font-family': 'MS Reference Sans Serif, Courier New',
                          'color': '#002B6B',
-                         'fontSize': 20,
+                         'fontSize': 18,
                          'vertical-align':'middle', 'margin-left': '15px','margin-right': '15px',
                          'marginBottom': '1.5em',
                          }
                    ),
-                    html.Div('Therefore, migration within Europe and between other continents and Europe can help create benefits for both sides. Despite this, the paradigm is a little more complex, existing factors such as the education of migrants, social, cultural and religious factors, natural and warlike events in the equation. Regardless of being widely defended by some economists and sociologists, migration is still not seen fairly as an alternative to the demographic crisis in Europe. This issue is highly relevant and is therefore used in political disputes, which are not always based on rational and fair arguments. ',
+                    
+                    ], style={'width':'45%', 'margin-right':'20px', 'margin-left':'10px'}),
+             
+             ], style={'display':'flex'}),
+                        
+                        html.Div([
+                        
+                        html.Div('Therefore, migration within Europe and between other continents and Europe can help create benefits for both sides. Despite this, the paradigm is a little more complex, existing factors such as the education of migrants, social, cultural and religious factors, natural and warlike events in the equation. Regardless of being widely defended by some economists and sociologists, migration is still not seen fairly as an alternative to the demographic crisis in Europe. This issue is highly relevant and is therefore used in political disputes, which are not always based on rational and fair arguments. ',
                    style={
                          'textAlign':'justify',
-                         'font-family': 'Tw Cen MT, Courier New',
+                         'font-family': 'MS Reference Sans Serif, Courier New',
                          'color': '#002B6B',
-                         'fontSize': 20,
+                         'fontSize': 18,
                          'vertical-align':'middle', 'margin-left': '15px','margin-right': '15px',
                          'marginBottom': '1.5em',
                          }
                    ),
-                    html.Div('In addition, the challenges of an aging population are not exclusive to Europe. If, on the one hand, the aging of the working population is not so pronounced in the United States, there are world powers such as China and Japan, for example, where this aging phenomenon occurs. In the rest of the world, population growth has been a reality and will continue to be in the coming decades mainly due to emerging countries and also underdeveloped countries, with high birth rates. ',
+                        
+                html.Div('In addition, the challenges of an aging population are not exclusive to Europe. If, on the one hand, the aging of the working population is not so pronounced in the United States, there are world powers such as China and Japan, for example, where this aging phenomenon occurs. In the rest of the world, population growth has been a reality and will continue to be in the coming decades mainly due to emerging countries and also underdeveloped countries, with high birth rates. ',
                    style={
                          'textAlign':'justify',
-                         'font-family': 'Tw Cen MT, Courier New',
+                         'font-family': 'MS Reference Sans Serif, Courier New',
                          'color': '#002B6B',
                          'vertical-align':'middle', 'margin-left': '15px','margin-right': '15px',
-                         'fontSize': 20,
+                         'fontSize': 18,
                          }
                    ),
-                    ]),
+                ], style={'margin-left':'20px', 'margin-right':'20px'}),
+                        
                          html.Div([
      html.Footer(html.Img(src='https://i.imgur.com/EqvSPMJ.png',
                    style={'display': 'block', 'margin-left': 'auto','margin-right': 'auto', 'width': '100%'})
@@ -838,6 +863,10 @@ app.layout = html.Div(#style={'backgroundColor':'#f9ffff'},
              ]
                         
                         )
+                  
+                    
+                    
+                    
                     ])
         ]),
 ])
@@ -1686,6 +1715,13 @@ def update_graph3(country, year):
 
 
 #### Conclusions Callbacks
+
+# @app.callback(
+#     Output("alert-fade", "is_open"),
+#     [Input("alert-toggle-fade", "n_clicks")],
+#     [State("alert-fade", "is_open")],
+# )
+
 @app.callback(Output('projections-map','figure'),
               Input('year_slider_projections','value'))
 
@@ -1697,8 +1733,7 @@ def update_projections_graph(year):
     layout_choropleth = auxchoro[1]
     
     fig_choropleth = go.Figure(data=data_choropleth, layout=layout_choropleth)
-    
-    
+        
     return fig_choropleth
 
 @app.callback(Output('projections-result1','figure'),
@@ -1719,11 +1754,15 @@ def update_hover_projections(hover):
 
                             #text=df.loc[df['GEO'] == country]['GEO'],
                             mode='lines',
+                            line=dict(
+                                color="#F4be6f"),
                             name=country
                         ) 
                     ]
 
     layout_pop_proj = dict(title=dict(text= 'Population Projections for '+ country),
+                           title_font_family='Tw Cen MT, Courier New',
+                           title_font_size = 18,
                   xaxis=dict(title='Years', fixedrange=True,
 
                             ),
@@ -1740,6 +1779,7 @@ def update_hover_projections(hover):
         plot_bgcolor='rgba(0,0,0,0)',paper_bgcolor='rgba(0,0,0,0)',
         
         )
+    figure.update_layout(margin=dict(r=0))
     
     return figure
 
@@ -1763,30 +1803,41 @@ def update_distribution_projection(hover,year):
     eu27_values=demoprojections[(demoprojections['GEO']=='European Union - 27 countries (from 2020)')&(demoprojections['TIME']==year)&(
         demoprojections['INDIC_DE']!='Median age of population')]['Value'].to_list()
     
+    colors=['#6facf4', '#F4be6f', '#b0d7ac']
+    
     fig = go.Figure()
+    
+    fig = make_subplots(rows=1, cols=2, subplot_titles=(country, "EU-27"), specs=[[{'type':'domain'}, {'type':'domain'}]])
+    
+    fig.add_trace(go.Pie(labels=groups, values=country_values, hole=.3, marker=dict(colors=colors), name=''), 1, 1)
+    
+    fig.add_trace(go.Pie(labels=groups, values=eu27_values, hole=.3, marker=dict(colors=colors), name = ''), 1, 2)    
+    
+    fig.update_layout(title_font_family='Tw Cen MT, Courier New', title_font_color='#002B6B', title_font_size = 18,
         
-    fig.add_trace(go.Bar(x=groups,y=country_values,name = country))
-    
-    fig.add_trace(go.Bar(x=groups,y=eu27_values, name = 'EU-27 Average'))    
-    
-    fig.update_layout(title_font_family='Tw Cen MT, Courier New', title_font_color='#002B6B',
-            showlegend=True,
+            showlegend=False,
             xaxis_type='category',
             yaxis=dict(
                 type='linear',
                 ticksuffix='%'),
+            legend=dict(
+    yanchor="top",
+    xanchor="left",
+    ),
             
             plot_bgcolor='rgba(0,0,0,0)')
     
     if year==2020:
         fig.update_layout(
-            title='Population distribution by broad age groups in ' + country + ' and EU-27 average<br>Year '+ str(year),
+            title='Population distribution by broad age groups - '+ str(year),
             )
     else:
         fig.update_layout(
-        title='Projections for the population distribution by broad age groups in ' + country + ' and EU-27 average<br>Year '+ str(year),
+        title='Population distribution by broad age groups - '+ str(year)+' Projections',
         )
-        
+    
+    fig.update_layout(margin=dict(l=0, r=0))
+    
     return fig
 
 @app.callback(Output('fade-proj','is_in'),
@@ -1799,39 +1850,39 @@ def update_fade(hover):
         return False
 
 # @app.callback(Output('tab1content', 'children'),
-#                Input('tabs', 'value'))
+#                 Input('tabs', 'value'))
 
 # def loadingtab1(value):
-#      time.sleep(2)
-#      raise PreventUpdate
+#       time.sleep(2)
+#       raise PreventUpdate
 
 # @app.callback(Output('tab2content', 'children'),
-#                Input('tabs', 'value'))
+#                 Input('tabs', 'value'))
 
 # def loadingtab2(value):
-#      time.sleep(2)
-#      raise PreventUpdate
+#       time.sleep(2)
+#       raise PreventUpdate
     
 # @app.callback(Output('tab3content', 'children'),
-#                Input('tabs', 'value'))
+#                 Input('tabs', 'value'))
 
 # def loadingtab3(value):
-#      time.sleep(2)
-#      raise PreventUpdate
+#       time.sleep(2)
+#       raise PreventUpdate
     
 # @app.callback(Output('tab4content', 'children'),
-#                Input('tabs', 'value'))
+#                 Input('tabs', 'value'))
 
 # def loadingtab4(value):
-#      time.sleep(2)
-#      raise PreventUpdate
+#       time.sleep(2)
+#       raise PreventUpdate
 
 # @app.callback(Output('tab5content', 'children'),
-#               Input('tabs', 'value'))
+#                Input('tabs', 'value'))
 
 # def loadingtab5(value):
-#      time.sleep(2)
-#      raise PreventUpdate
+#       time.sleep(2)
+#       raise PreventUpdate
 
 
 if __name__ == '__main__':

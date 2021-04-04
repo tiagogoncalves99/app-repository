@@ -73,7 +73,7 @@ def choropleth_data(year, segment):
                                       showocean=True,   # default = False
                                       oceancolor='rgba(0,0,0,0)',
                                       bgcolor='#f9ffff',
-                                      resolution = 110,
+                                      resolution = 50,
                                       center=dict(lon=12, lat=50),
                                       
                                      ),
@@ -97,7 +97,7 @@ def choropleth_data(year, segment):
                               showocean=True,   # default = False
                               oceancolor='rgba(0,0,0,0)',
                               bgcolor='#f9ffff',
-                              resolution = 110,
+                              resolution = 50,
                               center=dict(lon=12, lat=50),
                               
                              ),
@@ -155,8 +155,19 @@ country_options_fertility2= [dict(label= country, value=country)
 
 df_immigration = pd.read_csv('data/TotalPopulation_NativeForeign_BroadAgeGroups.csv').replace('Germany (until 1990 former territory of the FRG)','Germany')
 
+aux_miglines = df_immigration.copy()
+aux_miglines = aux_miglines.replace(':',np.nan)
+aux_miglines['Value']=aux_miglines['Value'].str.replace(' ','').astype(float)
+aux_miglines_option = []
+
+for country in np.sort(aux_miglines['GEO'].unique()):
+    if aux_miglines[(aux_miglines['C_BIRTH']=='Foreign country') & (aux_miglines['GEO']==country)]['Value'].apply(lambda x: math.isnan(x)).sum() == 252:
+       None
+    else: aux_miglines_option.append(country) 
+
+
 country_options_migration_lines=[dict(label= country, value=country)
-    for country in np.sort(df_immigration['GEO'].unique())]
+    for country in aux_miglines_option]
 
 immiaux = df_immigration[(df_immigration['AGE']=='Total')&(df_immigration['SEX']=="Total")&(df_immigration['TIME']==2019)&(df_immigration['C_BIRTH']=='Total')].replace(':',np.nan)
 immiaux['Value'] = immiaux['Value'].str.replace(' ','').astype(float)
@@ -271,7 +282,7 @@ def choropleth_data_projections(year):
                                       showocean=True,   # default = False
                                       oceancolor='rgba(0,0,0,0)',
                                       bgcolor='#f9ffff',
-                                      resolution = 110,
+                                      resolution = 50,
                                       center=dict(lon=12, lat=50),
                                       
                                      ),
@@ -289,7 +300,7 @@ def choropleth_data_projections(year):
 
 app = dash.Dash(__name__,external_stylesheets=[dbc.themes.BOOTSTRAP], )
 server = app.server
-app.layout = html.Div(#style={'backgroundColor':'#f9ffff'}, 
+app.layout = html.Div(id='main-app',#style={'backgroundColor':'#f9ffff'},
                       children=[
     html.Div([
     html.H1("Europe's ageing population - What's this phenomenon?",
@@ -315,11 +326,12 @@ app.layout = html.Div(#style={'backgroundColor':'#f9ffff'},
                     html.Br(),
                     dbc.Button(children='Play', id = 'play-button', n_clicks=0,
                        className="mr-1", color = 'primary',
-                        style={'width':'100%', 'bottom':'10px'},
+                        style={'width':'100%', 'bottom':'10px','margin-left':'10px'},
                         ),
             
             ], style={'width':'10%', 'bottom':'10px'}),
-                
+            
+                html.Div([dcc.Loading(type='graph', fullscreen=True, children=[html.Div(id='loading-init', children=0)])]), # LOADING ECRÃ INICIAL
                 
                 html.Div([
                     html.Div([
@@ -345,7 +357,7 @@ app.layout = html.Div(#style={'backgroundColor':'#f9ffff'},
                 value=1960,
                 updatemode='drag',
             ),
-            ], style={'width':'100%', 'margin-left':'15px'}),
+            ], style={'width':'100%', 'margin-left':'25px'}),
                     ], style={'width':'100%'}),
                 ], style={'display':'flex'}),
             
@@ -405,7 +417,10 @@ app.layout = html.Div(#style={'backgroundColor':'#f9ffff'},
                             options=country_options_fertility,
                             value=initial_country_options_fertility,
                             multi=True,
-                            style={'font_family':'Tw Cen MT, Courier New'}, # "overflow-y":"scroll"},
+                            searchable=True,
+                            #style={'font_family':'Tw Cen MT, Courier New', "overflow-y":"scroll", 'display':'inline-block'},
+                            style={'font_family':'Tw Cen MT, Courier New', 'display':'block'} # best so far
+
                         ),
             dcc.Graph(id='fertility-lines'),
             
@@ -420,7 +435,7 @@ app.layout = html.Div(#style={'backgroundColor':'#f9ffff'},
                         updatemode='drag',
                         step=1
     ),
-            ], style={'margin-left': '15px'}),
+            ], style={'margin-left': '20px'}),
                         
             html.Br(),
             html.Br(),
@@ -436,7 +451,7 @@ app.layout = html.Div(#style={'backgroundColor':'#f9ffff'},
             
             
             dcc.Loading(
-                type='cube',
+                type='dot',
                 color = '#6facf4',
                 children = dcc.Graph(id='fertility-bars')
                 
@@ -455,7 +470,8 @@ app.layout = html.Div(#style={'backgroundColor':'#f9ffff'},
                          'font-family': 'MS Reference Sans Serif, Courier New',
                          'color': '#002B6B',
                          'fontSize': 18,
-                         'marginBottom': '1.5em'
+                         'marginBottom': '1.5em',
+                         'margin-right':'20px',
                          }),
                     html.Div('There are factors of social, economic and cultural nature that explain such low birth rates all across Europe. Individual and behavioural decisions linked to family planning, also considering the reality of careers and labour market, education and well-being are some of the factors that influence these values.',
                    style={
@@ -463,7 +479,8 @@ app.layout = html.Div(#style={'backgroundColor':'#f9ffff'},
                          'font-family': 'MS Reference Sans Serif, Courier New',
                          'color': '#002B6B',
                          'fontSize': 18,
-                         'marginBottom': '1.5em'
+                         'marginBottom': '1.5em',
+                         'margin-right':'20px'
                          }
                    ),
                     html.Div('Despite this, there are some European countries that are close to the target value, such as Ireland or France. On the other hand, countries like Ukraine, Spain and Italy have been registering some of the lowest values on Europe on recent years. There are also some countries that rely heavily on births from foreign parents, which is explained by the substantial reception of younger migrants of childbearing age.',
@@ -472,9 +489,10 @@ app.layout = html.Div(#style={'backgroundColor':'#f9ffff'},
                          'font-family': 'MS Reference Sans Serif, Courier New',
                          'color': '#002B6B',
                          'fontSize': 18,
+                         'margin-right':'20px'
                          }
                    ),
-    ], style={'width': '98%', 'vertical-align':'middle', 'margin-left': 'auto','margin-right': 'auto'}),
+    ], style={'width': '98%', 'vertical-align':'middle', 'margin-left':'20px','margin-right':'20px'}),
             
              html.Div([
      html.Footer(html.Img(src='https://i.imgur.com/EqvSPMJ.png',
@@ -498,13 +516,21 @@ app.layout = html.Div(#style={'backgroundColor':'#f9ffff'},
                 html.Div([
                     
                     html.Div([
-                        
                         html.Br(),
                         html.Br(),
-                        html.Br(),
-                        html.Br(),
-                        html.Br(),
-                    html.Div("\n Although migration may play an important role in Europe's population dynamism, it is unlikely that it can reverse the ongoing trend of population ageing.",
+                        html.Div([
+                        html.Div("Migration: a solution or a problem?",
+                                 style={
+                         'textAlign':'justify',
+                         'font-family': 'Tw Cen MT, Courier New',
+                         'color': '#002B6B',
+                         'fontSize': 35,
+                         'marginBottom': '1.5em',
+                         'margin-left':'25px',
+                         }),
+                        ], style={'backgroundImage':'url(https://i.imgur.com/fyj6dJi.png)'}),
+
+                    html.Div("Although migration may play an important role in Europe's population dynamism, it is unlikely that it can reverse the ongoing trend of population ageing.",
                      style={
                          'textAlign':'justify',
                          'font-family': 'MS Reference Sans Serif, Courier New',
@@ -521,7 +547,7 @@ app.layout = html.Div(#style={'backgroundColor':'#f9ffff'},
                          }
                    ),
                     
-    ], style={'width': '40%', 'vertical-align':'middle', 'margin-left': 'auto','margin-right': 'auto'}),
+    ], style={'width': '40%', 'vertical-align':'middle', 'margin-left': '20px','margin-right': '20px'}),
                     html.Div([
                     
                     dcc.Loading(
@@ -551,7 +577,7 @@ app.layout = html.Div(#style={'backgroundColor':'#f9ffff'},
                          'fontSize': 18,
                          }
                    ),
-                ], style={'margin-left':'25px', 'margin-right':'15px'}),
+                ], style={'margin-left':'25px', 'margin-right':'25px'}),
                     
                     html.Br(),
                     dcc.Loading(
@@ -629,6 +655,7 @@ app.layout = html.Div(#style={'backgroundColor':'#f9ffff'},
                          'color': '#002B6B',
                          'fontSize': 18,
                          'marginBottom': '1.5em',
+                         'margin-right':'25px',
                          }),
                     html.Div('Subsequently, there has been a sharp decline in birth rates in almost every European country, leading to shorter age classes at the base of the pyramids – a problem that affects south European countries the most: Greece, Italy, Portugal or Spain all have shorter pyramid bases.',
                    style={
@@ -636,11 +663,12 @@ app.layout = html.Div(#style={'backgroundColor':'#f9ffff'},
                          'font-family': 'MS Reference Sans Serif, Courier New',
                          'color': '#002B6B',
                          'fontSize': 18,
+                         'margin-right':'25px',
                          }
                    ),
                 html.Br(),
                 html.Br(),
-    ], style={'width': '98%', 'vertical-align':'middle', 'margin-left': 'auto','margin-right': 'auto'}),
+    ], style={'width': '98%', 'vertical-align':'middle', 'margin-left': '25px','margin-right': '25px'}),
                 html.Div([
                     html.Div([
             dcc.Dropdown(
@@ -655,7 +683,7 @@ app.layout = html.Div(#style={'backgroundColor':'#f9ffff'},
             type="dot",
             children=dcc.Graph(id='pop_pyramid1')
             ),
-            ],style={'width': '32%'}),
+            ],style={'width': '33%'}),
                      html.Div([
             dcc.Dropdown(
                 id='country_drop2',
@@ -670,7 +698,7 @@ app.layout = html.Div(#style={'backgroundColor':'#f9ffff'},
             children=dcc.Graph(id='pop_pyramid2')
             ),
             
-            ],style={'width': '32%'}),
+            ],style={'width': '33%'}),
                       html.Div([
             dcc.Dropdown(
                 id='country_drop3',
@@ -685,8 +713,8 @@ app.layout = html.Div(#style={'backgroundColor':'#f9ffff'},
             children=dcc.Graph(id='pop_pyramid3')
             ),
             ]
-            ,style={'width': '32%'}              ),
-                ], style={'display': 'flex'}),
+            ,style={'width': '33%'}              ),
+                ], style={'display': 'flex', 'width':'98%', 'margin-left':'20px'}),
         
             html.Br(),
         
@@ -716,7 +744,7 @@ app.layout = html.Div(#style={'backgroundColor':'#f9ffff'},
                 included=False,
                 
             ),
-            ], style={'margin-left':'20px', 'margin-right':'10px'}),
+            ], style={'margin-left':'25px', 'margin-right':'10px', 'width':'95%'}),
             
                  
              html.Div([
@@ -724,9 +752,7 @@ app.layout = html.Div(#style={'backgroundColor':'#f9ffff'},
                    style={'display': 'block', 'margin-left': 'auto','margin-right': 'auto', 'width': '100%'})
                    ),
              ])
-        ]
-                    
-                    ),
+        ]),
         
         dcc.Tab(id='Projections',label='Projections',  style={'font-family':'Tw Cen MT', 'color':'#002B6B', 'font-size':20}, 
                 selected_style={'font-family':'Tw Cen MT', 'color':'#002B6B', 'font-size':25},
@@ -804,9 +830,19 @@ app.layout = html.Div(#style={'backgroundColor':'#f9ffff'},
                     html.Br(),
                     
              html.Div([
-                    html.Br(),
-                    html.Br(),
-                    html.Div("While Europe tries to stem population decline with policies to increase birth rates, some experts argue that low birth rates are a reason to celebrate. To defend this theory, they remember that this decline is also due to the recent balance in the role of gender and that a country does not need to have high birth rates to have economic growth. In addition, having fewer children results in a drastic reduction in greenhouse gas emissions, by significantly reducing consumption. Today we live more years in a healthy way, we can work later in life and another argument is that a smaller population helps to increase the per capita economic indicators, directly associated to the wealth of the country and its inhabitants. ",
+                     html.Div([
+                        html.Div("...and the coming years?",
+                                 style={
+                         'textAlign':'justify',
+                         'font-family': 'Tw Cen MT, Courier New',
+                         'color': '#002B6B',
+                         'fontSize': 35,
+                         'marginBottom': '1.5em',
+                         'margin-left':'50px',
+                         }),
+                        ], style={'backgroundImage':'url(https://i.imgur.com/bIYba0X.png)'}),
+
+                    html.Div("Population movements within Europe tend to be related to favourable job and career and economic opportunities, as in the example of educated young professionals from countries in the southern part of the continent to countries in north-western Europe. This can be seen in most of the projections. Richer and larger countries in the north-western Europe will tend to gain inhabitants, while other will stabilize or even decrease their population according to the estimates for year 2100. ",
                      style={
                          'textAlign':'justify',
                          'font-family': 'MS Reference Sans Serif, Courier New',
@@ -815,7 +851,7 @@ app.layout = html.Div(#style={'backgroundColor':'#f9ffff'},
                          'vertical-align':'middle', 'margin-left': '15px','margin-right': '15px',
                          'marginBottom': '1.5em',
                          }),
-                    html.Div('In another aspect, population movements within Europe tend to be related to favourable job and career and economic opportunities. In this sense, one of the most usual internal movements is that which happens between educated young professionals from countries in the southern part of the continent to countries in north-western Europe, which has been stressed in recent years mainly after the economic crisis.',
+                    html.Div('Having fewer children is also a consequence of recent balance of the role of gender, reduces environmental impact and boots per capita economic indicators. Despite all the benefits of external migration, there are more complex factors in the equation. Migration is still not seen unanimously as a solution to the problem in Europe and is therefore used in political disputes, which are not always based on rational and fair arguments.',
                    style={
                          'textAlign':'justify',
                          'font-family': 'MS Reference Sans Serif, Courier New',
@@ -825,34 +861,21 @@ app.layout = html.Div(#style={'backgroundColor':'#f9ffff'},
                          'marginBottom': '1.5em',
                          }
                    ),
+                    html.Div('In general, the challenges of an aging population are not exclusive to Europe. There are world powers such as China and Japan, where this aging phenomenon also occurs. In the rest of the world, population growth has been a reality and will continue to be in the coming decades.',
+                   style={
+                         'textAlign':'justify',
+                         'font-family': 'MS Reference Sans Serif, Courier New',
+                         'color': '#002B6B',
+                         'fontSize': 18,
+                         'vertical-align':'middle', 'margin-left': '15px','margin-right': '15px',
+                        'marginBottom': '1.5em',
+                        }
+                  ),
                     
-                    ], style={'width':'45%', 'margin-right':'20px', 'margin-left':'10px'}),
+                    ], style={'width':'45%', 'margin-right':'20px', 'margin-left':'20px'}),
              
              ], style={'display':'flex'}),
                         
-                        html.Div([
-                        
-                        html.Div('Therefore, migration within Europe and between other continents and Europe can help create benefits for both sides. Despite this, the paradigm is a little more complex, existing factors such as the education of migrants, social, cultural and religious factors, natural and warlike events in the equation. Regardless of being widely defended by some economists and sociologists, migration is still not seen fairly as an alternative to the demographic crisis in Europe. This issue is highly relevant and is therefore used in political disputes, which are not always based on rational and fair arguments. ',
-                   style={
-                         'textAlign':'justify',
-                         'font-family': 'MS Reference Sans Serif, Courier New',
-                         'color': '#002B6B',
-                         'fontSize': 18,
-                         'vertical-align':'middle', 'margin-left': '15px','margin-right': '15px',
-                         'marginBottom': '1.5em',
-                         }
-                   ),
-                        
-                html.Div('In addition, the challenges of an aging population are not exclusive to Europe. If, on the one hand, the aging of the working population is not so pronounced in the United States, there are world powers such as China and Japan, for example, where this aging phenomenon occurs. In the rest of the world, population growth has been a reality and will continue to be in the coming decades mainly due to emerging countries and also underdeveloped countries, with high birth rates. ',
-                   style={
-                         'textAlign':'justify',
-                         'font-family': 'MS Reference Sans Serif, Courier New',
-                         'color': '#002B6B',
-                         'vertical-align':'middle', 'margin-left': '15px','margin-right': '15px',
-                         'fontSize': 18,
-                         }
-                   ),
-                ], style={'margin-left':'20px', 'margin-right':'20px'}),
                         
                          html.Div([
      html.Footer(html.Img(src='https://i.imgur.com/EqvSPMJ.png',
@@ -870,6 +893,16 @@ app.layout = html.Div(#style={'backgroundColor':'#f9ffff'},
                     ])
         ]),
 ])
+
+#### INITIAL LOADING CALLBACK
+
+@app.callback(Output('loading-init', 'children'),
+              [Input('main-app','loading_state')])
+
+def loading(state):
+    time.sleep(4)
+    return ''
+
         
 ### INTRODUCTION TAB CALLBACKS
 @app.callback(
@@ -966,8 +999,8 @@ def fertility_lines_update(countries,years):
                         
                         ),
               yaxis=dict(title='Fertility Rate'),
-              title_font_family='Tw Cen MT, Courier New', title_font_color='#002B6B',
-              plot_bgcolor='rgba(0,0,0,0)',paper_bgcolor='rgba(0,0,0,0)',
+              title_font_family='Tw Cen MT, Courier New', title_font_color='#002B6B', title_font_size = 17,
+              plot_bgcolor='rgba(0,0,0,0)',paper_bgcolor='rgba(0,0,0,0)', title_x=0.5,
              )
 
     figure = go.Figure(data=data_fertility, layout=layout_fertility)
@@ -1001,7 +1034,8 @@ def fertility_bars_update(country):
 
     fig.update_layout(
         title='Number of births in ' + country + ' during the last decade',
-        title_font_family='Tw Cen MT, Courier New', title_font_color='#002B6B',
+        title_font_family='Tw Cen MT, Courier New', title_font_color='#002B6B', title_font_size = 17,
+        title_x=0.5,
         plot_bgcolor='rgba(0,0,0,0)',paper_bgcolor='rgba(0,0,0,0)',
         xaxis_tickfont_size=14,
         xaxis = dict(tickvals = [i for i in range(2010,2020)],                
@@ -1021,14 +1055,15 @@ def fertility_bars_update(country):
         ),
         barmode='group',
         bargap=0.3, # gap between bars of adjacent location coordinates.
-        bargroupgap=0.1 # gap between bars of the same location coordinate.
-        
+        bargroupgap=0.1, # gap between bars of the same location coordinate.
+        margin=dict(b=25)
         
     )
     
     for year in years:
             if math.isnan(df_fertility2_reporting[(df_fertility2_reporting['GEO']==country) & (df_fertility2_reporting['TIME']==year)]['Value']):
                 fig.add_annotation(text="No data available", xref="x", x=year, y=0.5, yref="paper", textangle=70, showarrow=False)
+    
     
     return fig
 
@@ -1047,13 +1082,35 @@ def update_immigration_1(country):
     
     
     
-    x = df_test['TIME'].unique()
-    x = np.sort(x)
+    # x = df_test['TIME'].astype(int).unique()
+    # x = np.sort(x)
+    
+    #auto x-axis
+    auxlin = df_test[(df_test['GEO']==country)&(df_test['C_BIRTH']=='Foreign country')&
+               (df_test['AGE']=='Total')&(df_test['SEX']=='Total')][['TIME','Value']]
+    
+    
+    
+    x=[]
+    for year in auxlin['TIME']:
+        if math.isnan(float(auxlin[auxlin['TIME']==year]['Value'].iloc[0])):
+            None
+        else:
+            x.append(year)
+    
+    #specific cases
+    if country=='United Kingdom':
+        x=[i for i in range(2009,2020)]
+    if country=='Ireland':
+        x=[i for i in range(2007,2020)]
+    
+   
+    
     
     fig = go.Figure()
 
     fig.add_trace(go.Scatter(
-        x = x, y = df_test[df_test['C_BIRTH'] == 'Reporting country']['Value'],
+        x = x, y = df_test[(df_test['C_BIRTH'] == 'Reporting country') & (df_test['TIME'].astype(int).isin(x))]['Value'],
         mode='lines',
         line=dict(width=1, color='#F4be6f'),
         stackgroup='one',
@@ -1062,7 +1119,7 @@ def update_immigration_1(country):
     ))
 
     fig.add_trace(go.Scatter(
-        x = x, y = df_test[df_test['C_BIRTH'] == 'Foreign country']['Value'],
+        x = x, y = df_test[(df_test['C_BIRTH'] == 'Foreign country') & (df_test['TIME'].astype(int).isin(x))]['Value'],
         mode='lines',
         line=dict(width=1, color='#b0d7ac'),
         stackgroup='one',
@@ -1073,6 +1130,10 @@ def update_immigration_1(country):
     fig.update_layout(
         #height = 500,
         #width = 1000,
+        title='Native/Foreign population distribution - ' + country,
+        title_font_family='Tw Cen MT, Courier New', title_font_color='#002B6B', title_font_size = 17,
+        title_x=0.1,
+               
         showlegend=True,
         xaxis_type='category',
         yaxis=dict(
@@ -1153,7 +1214,9 @@ def update_immigration_bars(n_clicks,country_list,stack,absolute):
                                           title_font_color='#002B6B',
                                           title_font_size = 17,
                                           ))
-        
+     
+    fig.update_layout(margin=dict(t=0))
+    
     return fig
 
 
@@ -1779,7 +1842,7 @@ def update_hover_projections(hover):
         plot_bgcolor='rgba(0,0,0,0)',paper_bgcolor='rgba(0,0,0,0)',
         
         )
-    figure.update_layout(margin=dict(r=0))
+    figure.update_layout(margin=dict(r=10), height = 400, title=dict(x=.5))
     
     return figure
 
@@ -1813,7 +1876,7 @@ def update_distribution_projection(hover,year):
     
     fig.add_trace(go.Pie(labels=groups, values=eu27_values, hole=.3, marker=dict(colors=colors), name = ''), 1, 2)    
     
-    fig.update_layout(title_font_family='Tw Cen MT, Courier New', title_font_color='#002B6B', title_font_size = 18,
+    fig.update_layout(title_font_family='Tw Cen MT, Courier New', title_font_color='#002B6B', title_font_size = 17,
         
             showlegend=False,
             xaxis_type='category',
@@ -1830,10 +1893,12 @@ def update_distribution_projection(hover,year):
     if year==2020:
         fig.update_layout(
             title='Population distribution by broad age groups - '+ str(year),
+            font_family='Tw Cen MT, Courier New', font_color='#002B6B', font_size = 12.5
             )
     else:
         fig.update_layout(
-        title='Population distribution by broad age groups - '+ str(year)+' Projections',
+        title='Population distribution by broad age groups - '+ str(year) +'<Br>                               Projections',
+        font_family='Tw Cen MT, Courier New',font_color='#002B6B', font_size = 12.5
         )
     
     fig.update_layout(margin=dict(l=0, r=0))
@@ -1849,40 +1914,8 @@ def update_fade(hover):
     else:
         return False
 
-# @app.callback(Output('tab1content', 'children'),
-#                 Input('tabs', 'value'))
 
-# def loadingtab1(value):
-#       time.sleep(2)
-#       raise PreventUpdate
 
-# @app.callback(Output('tab2content', 'children'),
-#                 Input('tabs', 'value'))
-
-# def loadingtab2(value):
-#       time.sleep(2)
-#       raise PreventUpdate
-    
-# @app.callback(Output('tab3content', 'children'),
-#                 Input('tabs', 'value'))
-
-# def loadingtab3(value):
-#       time.sleep(2)
-#       raise PreventUpdate
-    
-# @app.callback(Output('tab4content', 'children'),
-#                 Input('tabs', 'value'))
-
-# def loadingtab4(value):
-#       time.sleep(2)
-#       raise PreventUpdate
-
-# @app.callback(Output('tab5content', 'children'),
-#                Input('tabs', 'value'))
-
-# def loadingtab5(value):
-#       time.sleep(2)
-#       raise PreventUpdate
 
 
 if __name__ == '__main__':
