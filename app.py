@@ -528,7 +528,7 @@ app.layout = html.Div(id='main-app',#style={'backgroundColor':'#f9ffff'},
                          'marginBottom': '1.5em',
                          'margin-left':'25px',
                          }),
-                        ], style={'backgroundImage':'url(https://i.imgur.com/fyj6dJi.png)'}),
+                        ], style={'backgroundImage':'url(https://i.imgur.com/Peviss7.png )'}),
 
                     html.Div("Although migration may play an important role in Europe's population dynamism, it is unlikely that it can reverse the ongoing trend of population ageing.",
                      style={
@@ -840,7 +840,7 @@ app.layout = html.Div(id='main-app',#style={'backgroundColor':'#f9ffff'},
                          'marginBottom': '1.5em',
                          'margin-left':'50px',
                          }),
-                        ], style={'backgroundImage':'url(https://i.imgur.com/bIYba0X.png)'}),
+                        ], style={'backgroundImage':'url(https://i.imgur.com/ES43PDz.png)'}),
 
                     html.Div("Population movements within Europe tend to be related to favourable job and career and economic opportunities, as in the example of educated young professionals from countries in the southern part of the continent to countries in north-western Europe. This can be seen in most of the projections. Richer and larger countries in the north-western Europe will tend to gain inhabitants, while other will stabilize or even decrease their population according to the estimates for year 2100. ",
                      style={
@@ -971,7 +971,7 @@ def update_graph_choro(subset, year):
               [Input('choropleth_map','loading_state')])
 
 def loading(state):
-    time.sleep(4)
+    time.sleep(2)
     return ''
 
 
