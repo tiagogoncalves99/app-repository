@@ -968,7 +968,7 @@ def update_graph_choro(subset, year):
     return fig_choropleth
 
 @app.callback(Output('loading-init', 'children'),
-              [Input('main-app','loading_state')])
+              [Input('choropleth_map','loading_state')])
 
 def loading(state):
     time.sleep(4)
