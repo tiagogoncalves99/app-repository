@@ -971,7 +971,7 @@ def update_graph_choro(subset, year):
               [Input('choropleth_map','loading_state')])
 
 def loading(state):
-    time.sleep(0.01)
+    time.sleep(2)
     return ''
 
 
