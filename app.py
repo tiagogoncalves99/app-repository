@@ -896,12 +896,7 @@ app.layout = html.Div(id='main-app',#style={'backgroundColor':'#f9ffff'},
 
 #### INITIAL LOADING CALLBACK
 
-@app.callback(Output('loading-init', 'children'),
-              [Input('main-app','loading_state')])
 
-def loading(state):
-    time.sleep(4)
-    return ''
 
         
 ### INTRODUCTION TAB CALLBACKS
@@ -971,6 +966,14 @@ def update_graph_choro(subset, year):
     
     
     return fig_choropleth
+
+@app.callback(Output('loading-init', 'children'),
+              [Input('main-app','loading_state')])
+
+def loading(state):
+    time.sleep(4)
+    return ''
+
 
 #### FERTILITY CALLBACKS
 
