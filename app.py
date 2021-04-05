@@ -340,7 +340,7 @@ app.layout = html.Div(id='main-app',#style={'backgroundColor':'#f9ffff'},
             options=subset_options_choro,
             value='Less than 15 years',
             labelStyle={'display': 'inline-block'},
-            style={'font_family':'Tw Cen MT, Courier New', 'margin-left': '5px', 'width':'100%'},
+            style={'font_family':'Tw Cen MT, Courier New', 'margin-left': '15px', 'width':'100%'},
             inputStyle={"margin-left": "28px", 'margin-right':'10px'}
             ),
           ], style={'width':'100%'}),
