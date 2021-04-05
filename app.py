@@ -291,7 +291,7 @@ def choropleth_data_projections(year):
                              title=dict(text='Median age of the population on year ' + str(year),
                                         font_size=20,
                                         font_color="#002B6B",
-                                        font_family="Tw Cen MT",
+                                        font_family="Tw Cen MT, Courier New",
                                         x=.5 # Title relative position according to the xaxis, range (0,1)
                                        )
                             )
@@ -315,8 +315,8 @@ app.layout = html.Div(id='main-app',#style={'backgroundColor':'#f9ffff'},
     
                  
     dcc.Tabs(id='tabs',children = [
-        dcc.Tab(id='Introduction',label='Introduction',style={'font-family':'Tw Cen MT', 'color':'#002B6B', 'font-size':20},
-                selected_style={'font-family':'Tw Cen MT', 'color':'#002B6B', 'font-size':25},
+        dcc.Tab(id='Introduction',label='Introduction',style={'font-family':'Tw Cen MT, Courier New', 'color':'#002B6B', 'font-size':20},
+                selected_style={'font-family':'Tw Cen MT, Courier New', 'color':'#002B6B', 'font-size':25},
                 children=[html.Div(id='tab1content', children=[
                     html.Div([
                     dcc.Graph(id='choropleth_map'),
@@ -379,7 +379,7 @@ app.layout = html.Div(id='main-app',#style={'backgroundColor':'#f9ffff'},
                     html.Div('Over the past few decades, better healthcare services and the absence of major conflicts have contributed to a higher life expectancy among Europe’s nations. Combined with lower birth rates, this is resulting in a continent with a population that is getting older and inverting its nations’ population pyramids. This phenomenon, known as the Ageing of Europe, carries many socio-economic consequences, such as future overloading on the health and social care services or a higher pressure on pensions’ systems.',
                      style={
                          'textAlign':'justify',
-                         'font-family': 'MS Reference Sans Serif',
+                         'font-family': 'MS Reference Sans Serif, Tw Cen MT',
                          'color': '#002B6B',
                          'fontSize': 18,
                          'marginBottom': '1.5em',
@@ -387,7 +387,7 @@ app.layout = html.Div(id='main-app',#style={'backgroundColor':'#f9ffff'},
                     html.Div('Are there solutions to mitigate this problem or to minimize its long-term consequences? Is immigration a solution, or are policies that incentive natality preferred? Here we explore some sides of this demographic problem recurring to data made available by the European portal Eurostat.',
                    style={
                          'textAlign':'justify',
-                         'font-family': 'MS Reference Sans Serif, Courier New',
+                         'font-family': 'MS Reference Sans Serif, Tw Cen MT',
                          'color': '#002B6B',
                          'fontSize': 18,
                          }
@@ -407,8 +407,8 @@ app.layout = html.Div(id='main-app',#style={'backgroundColor':'#f9ffff'},
             
          
                 
-        dcc.Tab(id='Fertility',label='Fertility', style={'font-family':'Tw Cen MT', 'color':'#002B6B', 'font-size':20},
-                selected_style={'font-family':'Tw Cen MT', 'color':'#002B6B', 'font-size':25},
+        dcc.Tab(id='Fertility',label='Fertility', style={'font-family':'Tw Cen MT, Courier New', 'color':'#002B6B', 'font-size':20},
+                selected_style={'font-family':'Tw Cen MT, Courier New', 'color':'#002B6B', 'font-size':25},
                 children=[
                     html.Div(id='tab2content',children=[
                         html.Div([
@@ -467,7 +467,7 @@ app.layout = html.Div(id='main-app',#style={'backgroundColor':'#f9ffff'},
                     html.Div('Regarding fertility rates, the average number of births per woman varies from country to country within Europe, but has been generally decreasing over the past few decades across the continent. Consequently, the fertility rates are far from the minimum generation renewal standard, set at 2.1 children per woman, considered necessary in developed countries to maintain the population in the long run.',
                      style={
                          'textAlign':'justify',
-                         'font-family': 'MS Reference Sans Serif, Courier New',
+                         'font-family': 'MS Reference Sans Serif, Tw Cen MT',
                          'color': '#002B6B',
                          'fontSize': 18,
                          'marginBottom': '1.5em',
@@ -476,7 +476,7 @@ app.layout = html.Div(id='main-app',#style={'backgroundColor':'#f9ffff'},
                     html.Div('There are factors of social, economic and cultural nature that explain such low birth rates all across Europe. Individual and behavioural decisions linked to family planning, also considering the reality of careers and labour market, education and well-being are some of the factors that influence these values.',
                    style={
                          'textAlign':'justify',
-                         'font-family': 'MS Reference Sans Serif, Courier New',
+                         'font-family': 'MS Reference Sans Serif, Tw Cen MT',
                          'color': '#002B6B',
                          'fontSize': 18,
                          'marginBottom': '1.5em',
@@ -486,7 +486,7 @@ app.layout = html.Div(id='main-app',#style={'backgroundColor':'#f9ffff'},
                     html.Div('Despite this, there are some European countries that are close to the target value, such as Ireland or France. On the other hand, countries like Ukraine, Spain and Italy have been registering some of the lowest values on Europe on recent years. There are also some countries that rely heavily on births from foreign parents, which is explained by the substantial reception of younger migrants of childbearing age.',
                    style={
                          'textAlign':'justify',
-                         'font-family': 'MS Reference Sans Serif, Courier New',
+                         'font-family': 'MS Reference Sans Serif, Tw Cen MT',
                          'color': '#002B6B',
                          'fontSize': 18,
                          'margin-right':'20px'
@@ -505,8 +505,8 @@ app.layout = html.Div(id='main-app',#style={'backgroundColor':'#f9ffff'},
         
         
         
-        dcc.Tab(id='Migration',label='Migration',  style={'font-family':'Tw Cen MT', 'color':'#002B6B', 'font-size':20}, 
-                selected_style={'font-family':'Tw Cen MT', 'color':'#002B6B', 'font-size':25},
+        dcc.Tab(id='Migration',label='Migration',  style={'font-family':'Tw Cen MT, Courier New', 'color':'#002B6B', 'font-size':20}, 
+                selected_style={'font-family':'Tw Cen MT, Courier New', 'color':'#002B6B', 'font-size':25},
                 children=[
                     
                     html.Div(id='tab3content',children=[
@@ -533,7 +533,7 @@ app.layout = html.Div(id='main-app',#style={'backgroundColor':'#f9ffff'},
                     html.Div("Although migration may play an important role in Europe's population dynamism, it is unlikely that it can reverse the ongoing trend of population ageing.",
                      style={
                          'textAlign':'justify',
-                         'font-family': 'MS Reference Sans Serif, Courier New',
+                         'font-family': 'MS Reference Sans Serif, Tw Cen MT',
                          'color': '#002B6B',
                          'fontSize': 18,
                          'marginBottom': '1.5em'
@@ -541,7 +541,7 @@ app.layout = html.Div(id='main-app',#style={'backgroundColor':'#f9ffff'},
                     html.Div('If migration policies are carried out successfully, European countries may have several benefits, namely in combating an aging population across the continent, and in some regions in particular, by reducing demographic imbalances and boosting labour markets, which creates benefits for the economy of these countries.',
                    style={
                          'textAlign':'justify',
-                         'font-family': 'MS Reference Sans Serif, Courier New',
+                         'font-family': 'MS Reference Sans Serif, Tw Cen MT',
                          'color': '#002B6B',
                          'fontSize': 18,
                          }
@@ -572,7 +572,7 @@ app.layout = html.Div(id='main-app',#style={'backgroundColor':'#f9ffff'},
                 html.Div('However, recent migration trends have affected Europe unevenly. According to Eurostat data, some more peripherical countries such as Bulgaria or Portugal, as well as central parts of France have seen their population decreasing. Other regions, such as the case of some German and Swedish cities, have had a very considerable inflow of migrants, mainly from outside Europe.',
                    style={
                          'textAlign':'justify',
-                         'font-family': 'MS Reference Sans Serif, Courier New',
+                         'font-family': 'MS Reference Sans Serif, Tw Cen MT',
                          'color': '#002B6B',
                          'fontSize': 18,
                          }
@@ -642,8 +642,8 @@ app.layout = html.Div(id='main-app',#style={'backgroundColor':'#f9ffff'},
                     
                     ),
         
-        dcc.Tab(id='Population Pyramids', label='Population Pyramids',  style={'font-family':'Tw Cen MT', 'color':'#002B6B', 'font-size':20}, 
-                selected_style={'font-family':'Tw Cen MT', 'color':'#002B6B', 'font-size':25},
+        dcc.Tab(id='Population Pyramids', label='Population Pyramids',  style={'font-family':'Tw Cen MT, Courier New', 'color':'#002B6B', 'font-size':20}, 
+                selected_style={'font-family':'Tw Cen MT, Courier New', 'color':'#002B6B', 'font-size':25},
                 children=[
                     html.Div(id='tab4content',children=[
                     html.Br(),
@@ -651,7 +651,7 @@ app.layout = html.Div(id='main-app',#style={'backgroundColor':'#f9ffff'},
                     html.Div("On the Population Pyramids we find the result of past birth rates. In general, European countries have a strong proportion of the population over 45 years old. The baby-boomers generation’s individuals born after the Second World War (after 1945) are still present, as well as those born between 1965 and 1980, the so-called Generation X, children of the baby-boomers.",
                      style={
                          'textAlign':'justify',
-                         'font-family': 'MS Reference Sans Serif, Courier New',
+                         'font-family': 'MS Reference Sans Serif, Tw Cen MT',
                          'color': '#002B6B',
                          'fontSize': 18,
                          'marginBottom': '1.5em',
@@ -660,7 +660,7 @@ app.layout = html.Div(id='main-app',#style={'backgroundColor':'#f9ffff'},
                     html.Div('Subsequently, there has been a sharp decline in birth rates in almost every European country, leading to shorter age classes at the base of the pyramids – a problem that affects south European countries the most: Greece, Italy, Portugal or Spain all have shorter pyramid bases.',
                    style={
                          'textAlign':'justify',
-                         'font-family': 'MS Reference Sans Serif, Courier New',
+                         'font-family': 'MS Reference Sans Serif, Tw Cen MT',
                          'color': '#002B6B',
                          'fontSize': 18,
                          'margin-right':'25px',
@@ -754,8 +754,8 @@ app.layout = html.Div(id='main-app',#style={'backgroundColor':'#f9ffff'},
              ])
         ]),
         
-        dcc.Tab(id='Projections',label='Projections',  style={'font-family':'Tw Cen MT', 'color':'#002B6B', 'font-size':20}, 
-                selected_style={'font-family':'Tw Cen MT', 'color':'#002B6B', 'font-size':25},
+        dcc.Tab(id='Projections',label='Projections',  style={'font-family':'Tw Cen MT, Courier New', 'color':'#002B6B', 'font-size':20}, 
+                selected_style={'font-family':'Tw Cen MT, Courier New', 'color':'#002B6B', 'font-size':25},
                 children=[
                 
                     html.Div(id='tab5content',children=[
@@ -764,7 +764,7 @@ app.layout = html.Div(id='main-app',#style={'backgroundColor':'#f9ffff'},
                                 dbc.Alert('Hover through the map in order to update the graphs below', color='primary',    
                                          style={
                                              'textAlign':'justify',
-                                             'font-family': 'MS Reference Sans Serif, Courier New',
+                                             'font-family': 'MS Reference Sans Serif, Tw Cen MT',
                                              'fontSize': 16,
                                              }
                                          ),
@@ -845,7 +845,7 @@ app.layout = html.Div(id='main-app',#style={'backgroundColor':'#f9ffff'},
                     html.Div("Population movements within Europe tend to be related to favourable job and career and economic opportunities, as in the example of educated young professionals from countries in the southern part of the continent to countries in north-western Europe. This can be seen in most of the projections. Richer and larger countries in the north-western Europe will tend to gain inhabitants, while other will stabilize or even decrease their population according to the estimates for year 2100. ",
                      style={
                          'textAlign':'justify',
-                         'font-family': 'MS Reference Sans Serif, Courier New',
+                         'font-family': 'MS Reference Sans Serif, Tw Cen MT',
                          'color': '#002B6B',
                          'fontSize': 18,
                          'vertical-align':'middle', 'margin-left': '15px','margin-right': '15px',
@@ -854,7 +854,7 @@ app.layout = html.Div(id='main-app',#style={'backgroundColor':'#f9ffff'},
                     html.Div('Having fewer children is also a consequence of recent balance of the role of gender, reduces environmental impact and boots per capita economic indicators. Despite all the benefits of external migration, there are more complex factors in the equation. Migration is still not seen unanimously as a solution to the problem in Europe and is therefore used in political disputes, which are not always based on rational and fair arguments.',
                    style={
                          'textAlign':'justify',
-                         'font-family': 'MS Reference Sans Serif, Courier New',
+                         'font-family': 'MS Reference Sans Serif, Tw Cen MT',
                          'color': '#002B6B',
                          'fontSize': 18,
                          'vertical-align':'middle', 'margin-left': '15px','margin-right': '15px',
@@ -864,7 +864,7 @@ app.layout = html.Div(id='main-app',#style={'backgroundColor':'#f9ffff'},
                     html.Div('In general, the challenges of an aging population are not exclusive to Europe. There are world powers such as China and Japan, where this aging phenomenon also occurs. In the rest of the world, population growth has been a reality and will continue to be in the coming decades.',
                    style={
                          'textAlign':'justify',
-                         'font-family': 'MS Reference Sans Serif, Courier New',
+                         'font-family': 'MS Reference Sans Serif, Tw Cen MT',
                          'color': '#002B6B',
                          'fontSize': 18,
                          'vertical-align':'middle', 'margin-left': '15px','margin-right': '15px',
